@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 import { useSelector, useDispatch } from 'react-redux';
@@ -7,8 +7,19 @@ import { resetAnswer } from './redux/modules/quiz';
 const Ranking = (props) => {
   const dispatch = useDispatch();
   const _ranking = useSelector((state) => state.rank.ranking);
-  // Array 내장 함수 sort로 정렬하자!
-  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
+
+  useEffect(() => {
+    if (!user_rank.current) {
+      return;
+    } else {
+      window.scrollTo({
+        top: user_rank.current.offsetTop,
+        left: 0,
+        behavior: 'smooth',
+      });
+    }
+  }, []);
+  const user_rank = useRef(null);
 
   const ranking = _ranking.sort((a, b) => {
     // 높은 수가 맨 앞으로 오도록!
@@ -25,8 +36,21 @@ const Ranking = (props) => {
 
       <RankWrap>
         {ranking.map((r, idx) => {
+          if (r.current) {
+            return (
+              <RankItem key={idx} highlight={true} ref={user_rank}>
+                <RankNum>{idx + 1}등</RankNum>
+                <RankUser>
+                  <p>
+                    <b>{r.name}</b>
+                  </p>
+                  <p>{r.message}</p>
+                </RankUser>
+              </RankItem>
+            );
+          }
           return (
-            <RankItem key={idx} highlight={r.current ? true : false}>
+            <RankItem key={idx}>
               <RankNum>{idx + 1}등</RankNum>
               <RankUser>
                 <p>

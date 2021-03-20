@@ -15,13 +15,14 @@ const BucketList = (props) => {
         return (
           <ItemStyle
             className='list_item'
+            completed={list.completed}
             key={index}
             onClick={() => {
               // 배열의 몇번째 항목을 눌렀는 지, url 파라미터로 넘겨줍니다.
               props.history.push('/detail/' + index);
             }}
           >
-            {list}
+            {list.text}
           </ItemStyle>
         );
       })}
@@ -32,15 +33,19 @@ const BucketList = (props) => {
 const ListStyle = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 50vh;
   overflow-x: hidden;
   overflow-y: auto;
+  max-height: 50vh;
 `;
 
 const ItemStyle = styled.div`
   padding: 16px;
   margin: 8px;
-  background-color: aliceblue;
+  font-weight: 600;
+  color: ${(props) => (props.completed ? '#fff' : '#212121')};
+  background-color: ${(props) => (props.completed ? '#673ab7' : '#eee')};
+  box-sizing: border-box;
 `;
 
 export default BucketList;

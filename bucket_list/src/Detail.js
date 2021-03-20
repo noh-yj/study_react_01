@@ -4,7 +4,7 @@ import React from 'react';
 // redux hook을 불러옵니다.
 import { useDispatch, useSelector } from 'react-redux';
 // 내가 만든 액션 생성 함수를 불러옵니다.
-import { deleteBucket } from './redux/modules/bucket';
+import { deleteBucket, updateBucket } from './redux/modules/bucket';
 
 const Detail = (props) => {
   const dispatch = useDispatch();
@@ -16,7 +16,7 @@ const Detail = (props) => {
 
   return (
     <div>
-      <h1>{bucket_list[bucket_index]}</h1>
+      <h1>{bucket_list[bucket_index].text}</h1>
       <button
         onClick={() => {
           //   dispatch(); <- 괄호안에는 액션 생성 함수가 들어가야겠죠?
@@ -26,6 +26,14 @@ const Detail = (props) => {
         }}
       >
         삭제하기
+      </button>
+      <button
+        onClick={() => {
+          dispatch(updateBucket(bucket_index));
+          props.history.goBack();
+        }}
+      >
+        완료하기
       </button>
     </div>
   );
