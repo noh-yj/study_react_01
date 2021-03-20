@@ -1,7 +1,7 @@
-import './App.css';
+// import './App.css';
 import React from 'react';
 // import Start from './Start';
-import Score from './Score';
+// import Score from './Score';
 import Quiz from './Quiz';
 
 class App extends React.Component {
@@ -18,7 +18,7 @@ class App extends React.Component {
     return (
       <div className='App'>
         {/* <Start name={this.state.name} /> */}
-        <Score name={this.state.name} msg={this.state.scoreMsg} />
+        {/* <Score name={this.state.name} msg={this.state.scoreMsg} /> */}
         <Quiz />
       </div>
     );
