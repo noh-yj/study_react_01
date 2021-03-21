@@ -1,3 +1,6 @@
+import { firestore } from '../../firebase';
+const rank_db = firestore.collection('rank');
+
 // Actions
 
 // 유저 이름을 바꾼다
@@ -18,19 +21,7 @@ const initialState = {
     80: '우와! 우리는 엄청 가까운 사이!',
     100: '둘도 없는 단짝이에요! :)',
   },
-  ranking: [
-    { score: 40, name: '임민영', message: '안녕 르탄아!' },
-    { score: 40, name: '임민영', message: '안녕 르탄아!' },
-    { score: 40, name: '임민영', message: '안녕 르탄아!' },
-    { score: 40, name: '임민영', message: '안녕 르탄아!' },
-    { score: 40, name: '임민영', message: '안녕 르탄아!' },
-    { score: 40, name: '임민영', message: '안녕 르탄아!' },
-    { score: 40, name: '임민영', message: '안녕 르탄아!' },
-    { score: 40, name: '임민영', message: '안녕 르탄아!' },
-    { score: 40, name: '임민영', message: '안녕 르탄아!' },
-    { score: 40, name: '임민영', message: '안녕 르탄아!' },
-    { score: 40, name: '임민영', message: '안녕 르탄아!' },
-  ],
+  ranking: [],
 };
 
 // Action Creators
@@ -50,6 +41,32 @@ export const getRank = (rank_list) => {
   return { type: GET_RANK, rank_list };
 };
 
+// firebase
+export const addRankFB = (rank_info) => {
+  return function (dispatch) {
+    let rank_data = {
+      message: rank_info.message,
+      name: rank_info.name,
+      score: rank_info.score,
+    };
+    rank_db.add(rank_data).then((doc) => {
+      rank_data = { ...rank_data, id: doc.id, current: true };
+      dispatch(addRank(rank_data));
+    });
+  };
+};
+export const getRankFB = (rank_info) => {
+  return function (dispatch) {
+    rank_db.get().then((docs) => {
+      let rank_data = [];
+      docs.forEach((doc) => {
+        rank_data = [...rank_data, { id: doc.id, ...doc.data() }];
+      });
+      dispatch(getRank(rank_data));
+    });
+  };
+};
+
 // Reducer
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
@@ -67,7 +84,16 @@ export default function reducer(state = initialState, action = {}) {
     }
 
     case 'rank/GET_RANK': {
-      return { ...state, ranking: action.rank_list };
+      let ranking_data = [...state.ranking];
+      const rank_ids = state.ranking.map((r, idx) => {
+        return r.id;
+      });
+      action.rank_list.filter((r, idx) => {
+        if (rank_ids.indexOf(r.id) === -1) {
+          ranking_data = [...ranking_data, r];
+        }
+      });
+      return { ...state, ranking: ranking_data };
     }
 
     default:

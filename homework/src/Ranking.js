@@ -3,12 +3,14 @@ import styled from 'styled-components';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { resetAnswer } from './redux/modules/quiz';
+import { getRankFB } from './redux/modules/rank';
 
 const Ranking = (props) => {
   const dispatch = useDispatch();
   const _ranking = useSelector((state) => state.rank.ranking);
 
   useEffect(() => {
+    dispatch(getRankFB());
     if (!user_rank.current) {
       return;
     } else {

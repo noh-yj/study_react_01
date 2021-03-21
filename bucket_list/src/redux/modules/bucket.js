@@ -1,6 +1,6 @@
 // bucket.js
 import { firestore } from '../../firebase';
-const bucket_db = firestore.collection('bucket');
+const bucket_db = firestore.collection('buckets');
 
 // Actions
 const LOAD = 'bucket/LOAD';
@@ -97,7 +97,7 @@ export const updateBucketFB = (index) => {
 export const deleteBucketFB = (index) => {
   return function (dispatch, getState) {
     const _bucket_data = getState().bucket.list[index];
-    dispatch(isLoaded(true));
+
     if (!_bucket_data.id) {
       return;
     }
@@ -106,6 +106,7 @@ export const deleteBucketFB = (index) => {
       .delete()
       .then((res) => {
         dispatch(deleteBucket(index));
+        dispatch(isLoaded(true));
       })
       .catch((err) => {
         console.log(err);

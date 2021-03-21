@@ -1,7 +1,7 @@
 import React from 'react';
 import img from './scc_img01.png';
 import { useDispatch, useSelector } from 'react-redux';
-import { addRank } from './redux/modules/rank';
+import { addRank, addRankFB } from './redux/modules/rank';
 
 const Message = (props) => {
   const dispatch = useDispatch();
@@ -18,7 +18,6 @@ const Message = (props) => {
   // 점수 계산하기
   let score = (correct.length / answers.length) * 100;
 
-  // 컬러셋 참고: https://www.shutterstock.com/ko/blog/pastel-color-palettes-rococo-trend/
   return (
     <div
       style={{
@@ -83,7 +82,7 @@ const Message = (props) => {
               current: true,
             };
             // 랭킹 정보 넣기
-            dispatch(addRank(rank_info));
+            dispatch(addRankFB(rank_info));
             // 주소 이동
             props.history.push('/ranking');
           }}
